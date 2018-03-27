@@ -198,7 +198,7 @@ class Robin {
                     l++;
                 }
                 else if(out[l-1].serT<in[i].arrT){
-                    i=0;
+                    i=-1;
                     continue myloop;
                 }
                 
@@ -229,9 +229,7 @@ class Robin {
         Robin master = new Robin();
         Robinout masterout = new Robinout();
         //transfer arrival times to output array
-        for(int i=0;i<n;i++){
-            masterout.arrArrT[i]= in[i].arrT;
-        }
+        
         master.setter(s,in,n);
         no = master.noOfSlabs(in, n);//need to rectified this method
         Robinout out[] = new Robinout[no];// this array contains the output
