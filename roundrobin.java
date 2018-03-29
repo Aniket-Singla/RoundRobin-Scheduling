@@ -28,6 +28,35 @@ class Robinout{
         //     }
         // }
     }
+    void gantt(Robinout out[],int n){
+        int i;
+	System.out.println("Below is the Gantt chart:");
+	for (i = 0; i < n; i++) {
+		System.out.print("---");
+	}
+	System.out.println();
+	for (i = 0; i < n; i++) {
+        System.out.print("| "+out[i].name);
+		
+
+	}
+	System.out.print("|"+"\n");
+	for (i = 0; i < n; i++) {
+		System.out.print("---");
+    }
+    System.out.print("\n"+out[0].conT);
+
+
+	for (i = 0; i < n; i++) {
+		if (out[i].serT< 10) {
+			System.out.print("  "+ out[i].serT);
+		}
+		else {
+			System.out.print(" "+ out[i].serT);
+		}
+	}
+	System.out.println("\n");
+    }
 }
 
 
@@ -164,6 +193,7 @@ class Robin {
                     continue myloop;
                 }
                 out[l] = new Robinout();
+                
                 if((in[i].burT>t)&&(in[i].arrT<=out[l-1].serT)){
                     System.out.println(l);
                     in[i].burT = in[i].burT- t;
@@ -249,7 +279,7 @@ class Robin {
 
         l=master.schedule(in,out,n);
         masterout.printout(out,l);
-        
+        masterout.gantt(out, l);
 
 
     }
