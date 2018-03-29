@@ -34,7 +34,7 @@ class Robinout{
 
 
 class Robin {
-    private int burT,arrT;
+    private int burT,arrT,pno;
     static int t;
     String name;
     void setter(Scanner s,Robin in[],int n){
@@ -42,6 +42,7 @@ class Robin {
     
         for(i=0;i<n;i++){
             in[i] = new Robin();//to avoid null pointer exception
+            in[i].pno= i;
             System.out.print("Enter the name of the Process ");
             System.out.print(i+1);
             System.out.print(" :");
@@ -91,7 +92,7 @@ class Robin {
         return;
         
     }
-    int schedule(Robin in[],Robinout out[],int n, int no){
+    int schedule(Robin in[],Robinout out[],int n){
         int i,j,l=0;
         Robin temp;
         //in this scheduling i have used waitT , burT and taT for input array while serT and arrT for output array of objects
@@ -167,7 +168,7 @@ class Robin {
                     System.out.println(l);
                     in[i].burT = in[i].burT- t;
                     out[l].name = in[i].name;
-                    out[l].pno = i;
+                    out[l].pno = in[i].pno;
                 
                     out[l].conT= out[l-1].serT;
                     out[l].serT = out[l].conT + t;
@@ -177,7 +178,7 @@ class Robin {
                 else if((in[i].burT<=t)&&(in[i].burT>0)&&(in[i].arrT<=out[l-1].serT)){
                     System.out.println(l);
                     out[l].name = in[i].name;
-                    out[l].pno = i;
+                    out[l].pno = in[i].pno;
                     out[l].conT= out[l-1].serT;
                     out[l].serT = out[l].conT + in[i].burT;
                     
@@ -189,7 +190,7 @@ class Robin {
                 else if(in[i].burT==0&&(in[i].arrT<=out[l-1].serT)){  // if burst time of any process is over then n--
                     System.out.println(l);
                     out[l].name = in[i].name;
-                    out[l].pno = i;
+                    out[l].pno = in[i].pno;
                     out[l].conT= out[l-1].serT;
                     out[l].serT = out[l].conT + in[i].burT;
                     
@@ -198,8 +199,20 @@ class Robin {
                     l++;
                 }
                 else if(out[l-1].serT<in[i].arrT){
-                    i=-1;
+                    if(n!=1){
+                        i=-1;
                     continue myloop;
+                    }
+                    else{
+                    out[l].name = in[i].name;
+                    out[l].pno = in[i].pno;
+                    out[l].conT= in[i].arrT;
+                    out[l].serT = out[l].conT + in[i].burT;
+                    
+                    delete(in, i, n);
+                    n--;
+                    l++;
+                    }
                 }
                 
                 System.out.println("Stage "+l+":");
@@ -220,7 +233,7 @@ class Robin {
     }
     
     public static void main(String as[]){
-        int n,no=20,totTat,totwaiting;
+        int n,l,no=20,totTat,totwaiting;
         float avgWait,avgTat;
         Scanner s = new Scanner(System.in);
         System.out.print("Enter the no. of processes :");
@@ -232,10 +245,10 @@ class Robin {
         
         master.setter(s,in,n);
         no = master.noOfSlabs(in, n);//need to rectified this method
-        Robinout out[] = new Robinout[no];// this array contains the output
+        Robinout out[] = new Robinout[no+5];//if a process runs for time less than time quantum more indexes are required
 
-        master.schedule(in,out,n,no);
-        masterout.printout(out,no);
+        l=master.schedule(in,out,n);
+        masterout.printout(out,l);
         
 
 
